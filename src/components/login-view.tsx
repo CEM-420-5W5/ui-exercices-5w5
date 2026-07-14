@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { MyButton } from "./my-button";
+import { Button } from "./button";
 
 export interface LoginViewProps {
     apiBaseUrl?: string;
@@ -59,12 +59,12 @@ export function LoginView({ apiBaseUrl = "http://localhost:5011/api/" }: LoginVi
                         Qui êtes-vous?
                     </div>
                     <div className="flex gap-2">
-                        <MyButton variant="secondary" onClick={enregistrer}>
+                        <Button variant="secondary" onClick={enregistrer}>
                             Enregistrer
-                        </MyButton>
-                        <MyButton onClick={login}>
+                        </Button>
+                        <Button onClick={login}>
                             Login
-                        </MyButton>
+                        </Button>
                     </div>
                 </div>
             );
@@ -75,9 +75,9 @@ export function LoginView({ apiBaseUrl = "http://localhost:5011/api/" }: LoginVi
                     <div className="mb-2">
                         Bienvenue!
                     </div>
-                    <MyButton onClick={logout}>
+                    <Button onClick={logout}>
                         Logout
-                    </MyButton>
+                    </Button>
                 </div>
             );
         }
