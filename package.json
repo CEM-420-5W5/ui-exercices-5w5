@@ -1,6 +1,6 @@
 {
   "name": "ui-exercices-5w5",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Composantes graphiques utilisees pour les exercices de 5w5",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
