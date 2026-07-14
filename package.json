@@ -1,0 +1,39 @@
+{
+  "name": "ui-exercices-5w5",
+  "version": "1.0.0",
+  "description": "Composantes graphiques utilisees pour les exercices de 5w5",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CEM-420-5W5/ui-exercices-5w5.git"
+  },
+  "keywords": [
+    "5w5",
+    "exercices",
+    "CEM",
+    "420"
+  ],
+  "author": "Mathieu Briau",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CEM-420-5W5/ui-exercices-5w5/issues"
+  },
+  "homepage": "https://github.com/CEM-420-5W5/ui-exercices-5w5#readme",
+  "devDependencies": {
+    "@types/react": "^19.2.17",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "tsup": "^8.5.1"
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.24.0",
+    "tailwind-merge": "^3.6.0"
+  }
+}
