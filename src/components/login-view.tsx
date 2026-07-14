@@ -45,6 +45,7 @@ export function LoginView({ apiUrl = "http://localhost:5011/api/Account" }: Logi
         sessionStorage.setItem("token", result.data.token);
         sessionStorage.setItem("username", result.data.username);
         setToken(result.data.token);
+        setLoggedInUsername(result.data.username);
     }
 
     async function logout(){
