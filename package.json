@@ -2,7 +2,19 @@
   "name": "ui-exercices-5w5",
   "version": "1.0.0",
   "description": "Composantes graphiques utilisees pour les exercices de 5w5",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsup",
@@ -29,7 +41,7 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "tsup": "^8.5.1",
-    "typescript": "^7.0.2"
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
