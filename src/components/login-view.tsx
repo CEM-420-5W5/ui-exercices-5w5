@@ -2,24 +2,29 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Button } from "./button";
+import { Button } from "./base/button";
+import { BorderedContainer } from "./bordered-container";
+import { Field, FieldLabel } from "./base/field";
+import { Input } from "./base/input";
 
 export interface LoginViewProps {
-    apiBaseUrl?: string;
+    apiUrl?: string;
 }
 
-export function LoginView({ apiBaseUrl = "http://localhost:5011/api/" }: LoginViewProps) {
+export function LoginView({ apiUrl = "http://localhost:5011/api/Account" }: LoginViewProps) {
 
     const [token, setToken] = useState<string | null>(null);
+    const [loggedInUsername, setLoggedInUsername] = useState<string | null>(null);
     const [username, setUsername] = useState("test");
-    const [password, setPassword] = useState("Passw0rd!");
+    const password = "Passw0rd!";
 
     useEffect(() => {
         const tokenJSON : string | null = sessionStorage.getItem("token");
         setToken(tokenJSON);
-    }, []);
 
-    const accountBaseUrl = apiBaseUrl + "Account/";
+        const usernameJSON : string | null = sessionStorage.getItem("username");
+        setLoggedInUsername(usernameJSON);
+    }, []);
 
     async function enregistrer(){
         let registerData = {
@@ -28,7 +33,7 @@ export function LoginView({ apiBaseUrl = "http://localhost:5011/api/" }: LoginVi
             password : password,
             passwordConfirm : password,
         }
-        await axios.post(accountBaseUrl + "Register", registerData);
+        await axios.post(apiUrl + "Register", registerData);
     }
 
     async function login(){
@@ -36,14 +41,16 @@ export function LoginView({ apiBaseUrl = "http://localhost:5011/api/" }: LoginVi
             username: username,
             password: password
         }
-        const result = await axios.post(accountBaseUrl + "Login", loginData);
+        const result = await axios.post(apiUrl + "Login", loginData);
         sessionStorage.setItem("token", result.data.token);
+        sessionStorage.setItem("username", result.data.username);
         setToken(result.data.token);
     }
 
     async function logout(){
         // Rien d'autre à faire que d'oublier le Token
         sessionStorage.removeItem("token");
+        sessionStorage.removeItem("username");
         setToken(null);
     }
 
@@ -59,6 +66,16 @@ export function LoginView({ apiBaseUrl = "http://localhost:5011/api/" }: LoginVi
                         Qui êtes-vous?
                     </div>
                     <div className="flex gap-2">
+                        <Field className="mb-2">
+                            <FieldLabel htmlFor="input-field-data-name">Ajout de data</FieldLabel>
+                            <Input
+                                id="input-field-data-name"
+                                type="text"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                placeholder="N'importe quel texte"
+                            />      
+                        </Field>
                         <Button variant="secondary" onClick={enregistrer}>
                             Enregistrer
                         </Button>
@@ -73,7 +90,7 @@ export function LoginView({ apiBaseUrl = "http://localhost:5011/api/" }: LoginVi
             return (
                 <div>
                     <div className="mb-2">
-                        Bienvenue!
+                        Bienvenue {loggedInUsername}!
                     </div>
                     <Button onClick={logout}>
                         Logout
@@ -84,8 +101,8 @@ export function LoginView({ apiBaseUrl = "http://localhost:5011/api/" }: LoginVi
     }
 
     return(
-        <div className="borderedZone">
+        <BorderedContainer>
             {displayLogin()}   
-        </div>
+        </BorderedContainer>
     );
 }
