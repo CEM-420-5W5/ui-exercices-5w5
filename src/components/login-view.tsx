@@ -16,9 +16,13 @@ export function LoginView({ apiUrl = "http://localhost:5011/api/Account" }: Logi
     const [token, setToken] = useState<string | null>(null);
     const [loggedInUsername, setLoggedInUsername] = useState<string | null>(null);
     const [username, setUsername] = useState("test");
+    const [isClient, setIsClient] = useState(false);
     const password = "Passw0rd!";
 
     useEffect(() => {
+        // Marquer que nous sommes côté client
+        setIsClient(true);
+        
         const tokenJSON : string | null = sessionStorage.getItem("token");
         setToken(tokenJSON);
 
@@ -49,10 +53,10 @@ export function LoginView({ apiUrl = "http://localhost:5011/api/Account" }: Logi
     }
 
     async function logout(){
-        // Rien d'autre à faire que d'oublier le Token
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("username");
         setToken(null);
+        setLoggedInUsername(null);
     }
 
     function isLoggedIn() : boolean{
@@ -99,6 +103,11 @@ export function LoginView({ apiUrl = "http://localhost:5011/api/Account" }: Logi
                 </div>
             );
         }
+    }
+
+    // Ne rien rendre tant que le composant n'est pas monté côté client
+    if (!isClient) {
+        return null;
     }
 
     return(
