@@ -1,3 +1,6 @@
+export { Field,  } from "./components/base/field";
+export { Input,  } from "./components/base/input";
+export { Label,  } from "./components/base/label";
 export { Button,  } from "./components/base/button";
 export { LoginView } from "./components/login-view";
 export { BorderedContainer } from "./components/bordered-container";
