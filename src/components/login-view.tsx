@@ -10,9 +10,15 @@ import { Input } from "./base/input";
 export interface LoginViewProps {
     apiUrl?: string;
     onLoginSuccess?: (username: string, token: string) => void;
+    onLogout?: () => void;
 }
 
-export function LoginView({ apiUrl = "http://localhost:5011/api/Account", onLoginSuccess }: LoginViewProps) {
+interface LoginResultDTO {
+    username: string;
+    token: string;
+}
+
+export function LoginView({ apiUrl = "http://localhost:5011/api/Account", onLoginSuccess, onLogout }: LoginViewProps) {
 
     const [token, setToken] = useState<string | null>(null);
     const [loggedInUsername, setLoggedInUsername] = useState<string | null>(null);
@@ -42,8 +48,10 @@ export function LoginView({ apiUrl = "http://localhost:5011/api/Account", onLogi
                 password : password,
                 passwordConfirm : password,
             }
-            await axios.post(apiUrl + "/Register", registerData);
-            setErrorMessage(null);
+            const result:any = await axios.post(apiUrl + "/Register", registerData);
+            const loginResult:LoginResultDTO = result.data;
+            completeLogin(loginResult);
+            
         } catch (error) {
             setErrorMessage("Erreur lors de l'enregistrement");
         } finally {
@@ -59,12 +67,10 @@ export function LoginView({ apiUrl = "http://localhost:5011/api/Account", onLogi
                 username: username,
                 password: password
             }
-            const result = await axios.post(apiUrl + "/Login", loginData);
-            sessionStorage.setItem("token", result.data.token);
-            sessionStorage.setItem("username", result.data.username);
-            setToken(result.data.token);
-            setLoggedInUsername(result.data.username);
-            onLoginSuccess?.(result.data.username, result.data.token);
+            const result:any = await axios.post(apiUrl + "/Login", loginData);
+            const loginResult:LoginResultDTO = result.data;
+            completeLogin(loginResult);
+            
         } catch (error) {
             setErrorMessage("Nom d'utilisateur ou mot de passe incorrect");
         } finally {
@@ -72,11 +78,21 @@ export function LoginView({ apiUrl = "http://localhost:5011/api/Account", onLogi
         }
     }
 
+    function completeLogin(loginResult:LoginResultDTO){
+        sessionStorage.setItem("token", loginResult.token);
+        sessionStorage.setItem("username", loginResult.username);
+        setToken(loginResult.token);
+        setLoggedInUsername(loginResult.username);
+        onLoginSuccess?.(loginResult.username, loginResult.token);
+        setErrorMessage(null);
+    }
+
     async function logout(){
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("username");
         setToken(null);
         setLoggedInUsername(null);
+        onLogout?.();
     }
 
     function isLoggedIn() : boolean{
@@ -86,12 +102,7 @@ export function LoginView({ apiUrl = "http://localhost:5011/api/Account", onLogi
     function displayLogin(){
         if(!isLoggedIn()){
             return(
-                <div className="w-full max-w-md mx-auto">
-                    <div className="mb-6">
-                        <h2 className="text-2xl font-bold mb-2">Connexion</h2>
-                        <p className="text-gray-600">Entrez vos identifiants pour continuer</p>
-                    </div>
-
+                <div className="w-full">
                     {errorMessage && (
                         <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
                             {errorMessage}
@@ -133,11 +144,14 @@ export function LoginView({ apiUrl = "http://localhost:5011/api/Account", onLogi
         else{
             return (
                 <div className="w-full">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-start">
                         <div>
                             <p className="text-sm text-gray-600">Connecté en tant que</p>
                             <p className="text-xl font-bold">{loggedInUsername}</p>
                         </div>
+                    </div>
+                    
+                    <div className="flex gap-3 pt-2 mt-7">
                         <Button 
                             variant="secondary"
                             onClick={logout}
