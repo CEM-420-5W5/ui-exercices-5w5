@@ -1,4 +1,4 @@
-export { Field,  } from "./components/base/field";
+export { Field, FieldLabel  } from "./components/base/field";
 export { Input,  } from "./components/base/input";
 export { Label,  } from "./components/base/label";
 export { Button,  } from "./components/base/button";
